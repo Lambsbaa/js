@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>大厂</title>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+	/*
+	一、变量声明
+	
+	【var】 可重复声明变量，原变量会被新变量覆盖；可重新赋值；
+	【let】 不可重复声明变量；可重新赋值；
+	【const】 不可重复声明变量；不可重新赋值；
+	*/
+	var a = 10;
+	var a = 8;
+	let b = 10;
+	//let b = 8;let不可重复声明变量，会报错
+	b = 8;//可对let声明的变量重新赋值
+	const c = 10;
+	//const c = 8;const不可重复声明变量，会报错
+	//c =6;const声明并初始化的变量，不可重新赋值
+	console.log(a,b,c);
+
+
+
+	/*
+	二、作用域
+
+	【全局作用域】全局变量（全局var声明的变量、全局/函数内未使用var声明的变量）
+	【局部作用域】局部变量（函数内var声明的变量、函数参数）
+	*/
+	//在函数内，局部变量与全局变量同名时，局部变量优先级更高，会覆盖到全局变量
+	var scope = "global";
+	function checkScope(){
+		var scope = "local";
+		return scope;
+	}
+	console.log(checkScope());//"local"
+
+	//在函数内不写var语句，直接声明变量，即认为是全局变量
+	scope2 = "global";
+	function checkScope2(){
+		scope2 = "local";//局部变量优先级更高
+		myScope = "myLocal";//未使用var声明的变量，为全局变量
+		var myScope2 = "myLocal2";//使用var声明，为局部变量
+		return [scope2,myScope];
+	}
+	console.log(checkScope2());//["local","myLocal"]
+	console.log(scope2);//"local"
+	console.log(myScope);//"myLocal"
+	//console.log(myScope2);//报错：变量未定义 not defined
+
+	//嵌套函数，变量在函数体内及嵌套的子函数体内都是有定义的
+	var scope3 = "global scope";
+	function checkScope3(){
+		var scope3 = "local scope";
+		var scope33 = "local scope33";
+		function nested(){
+			var scope3 = "nested scope";
+			console.log(scope33);//scope33在checkScope3()嵌套的子函数中也是有定义的
+			return scope3;
+		}
+		return nested();
+	}
+	console.log(checkScope3());//"nested scope"
+	console.log(scope3);//"global scope"
+	//console.log(nested());//报错：函数未定义 not defined
+
+	//变量提升：在函数内声明的所有变量在函数体内始终是可见的，甚至在声明前就可用了。
+	function test(){
+		console.log("声明前："+i);//undefined  仅提升声明，初始化仍按照原顺序
+		var i;
+		console.log("声明后："+i);//undefined
+		i=0;
+		console.log("声明并初始化后："+i);//0
+	}
+	test();
+
+
+	//全局对象：声明的全局变量也是全局对象的属性
+	//声明上下文对象：局部变量是调用函数的某个对象的属性，没有方法可以引用局部变量中存放的对象，类似嵌套函数中nested()
+	var globalObj = this;//引用全局对象的变量
+	console.log(globalObj);
+	//使用严格模式
+	var a = 10;//全局变量，不可配置，delete运算符无法删除
+	b = 8;//报错
+	//非严格模式
+	var a = 10;//全局变量，不可配置，delete运算符无法删除
+	b = 8;//全局变量，可配置，delete运算符可删除
+
+
+
+	/*
+	三、作用域链
+	定义：作用域链是一个对象列表或链表，这组对象定义了这段代码“作用域”中的变量。
+	js查找变量x的值的过程叫做【变量解析】
+	*/
+	//闭包
+	var scope4 = "global";
+	function checkScope4(){
+		var scope4 = "local4";
+		function f(){
+			return scope4;
+		}
+		return f();//返回结果
+	}
+	console.log(checkScope4());
+
+	function checkScope5(){
+		var scope4 = "local4";
+		function f(){
+			return scope4;
+		}
+		return f;//返回对象
+	}
+	console.log(checkScope5()());
+
+	var globalObj = this;//引用全局对象的变量
+	console.log(globalObj);
+</script>
+</html>
